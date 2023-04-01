@@ -1,0 +1,9 @@
+server:
+  port: 8025
+
+spring:
+  datasource:
+    username: system
+    password: 123456
+    url: jdbc:oracle:thin:@//localhost:1521/ORCL
+    driver-class-name: oracle.jdbc.OracleDriver
