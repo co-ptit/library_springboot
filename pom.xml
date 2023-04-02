@@ -15,6 +15,7 @@
     <description>library_springboot</description>
     <properties>
         <java.version>11</java.version>
+        <swagger-version>1.6.15</swagger-version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,6 +48,20 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--       Swagger       -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${swagger-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webmvc-core</artifactId>
+            <version>${swagger-version}</version>
+        </dependency>
+        <!--      Swagger      -->
+
     </dependencies>
 
     <build>
