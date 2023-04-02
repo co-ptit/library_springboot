@@ -8,7 +8,6 @@ import co.ptit.utils.Constant;
 import co.ptit.utils.MsgUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ public class TestController {
     private final TestRepository testRepository;
 
     @PostMapping("/create")
-    ResponseEntity<?> create(@RequestBody TestRequestDto request) {
+    ResponseDto<?> create(@RequestBody TestRequestDto request) {
         testRepository.save(Test.builder()
                 .code(request.getCode())
                 .name(request.getName())
@@ -35,16 +34,16 @@ public class TestController {
                 .createUser(request.getUserName())
                 .createDatetime(LocalDateTime.now())
                 .build());
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseDto.ok(Boolean.TRUE);
     }
 
     @GetMapping("/read")
-    ResponseEntity<?> read(@RequestParam("id") Long id) {
-        return ResponseEntity.ok(testRepository.findByIdAndStatus(id, Constant.STATUS.ACTIVE.value()));
+    ResponseDto<?> read(@RequestParam("id") Long id) {
+        return ResponseDto.ok(testRepository.findByIdAndStatus(id, Constant.STATUS.ACTIVE.value()));
     }
 
     @PutMapping("/update")
-    ResponseEntity<?> update(@RequestBody TestRequestDto request) {
+    ResponseDto<?> update(@RequestBody TestRequestDto request) {
         testRepository.save(Test.builder()
                 .id(request.getId())
                 .code(request.getCode())
@@ -52,17 +51,17 @@ public class TestController {
                 .status(Constant.STATUS.ACTIVE.value())
                 .updateDatetime(LocalDateTime.now())
                 .build());
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseDto.ok(Boolean.TRUE);
     }
 
     @DeleteMapping("/delete")
-    ResponseEntity<?> delete(@RequestParam("id") Long id) {
+    ResponseDto<?> delete(@RequestParam("id") Long id) {
         testRepository.save(Test.builder()
                 .id(id)
                 .status(Constant.STATUS.INACTIVE.value())
                 .updateDatetime(LocalDateTime.now())
                 .build());
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseDto.ok(Boolean.TRUE);
     }
 
     @GetMapping("/success")
