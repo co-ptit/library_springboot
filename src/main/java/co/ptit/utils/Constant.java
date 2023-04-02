@@ -1,5 +1,7 @@
 package co.ptit.utils;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * project: library_springboot
  * date:    4/2/2023
@@ -44,4 +46,6 @@ public interface Constant {
         String SEQ_BILL = "SEQ_BILL_ID";
         String SEQ_TEST = "SEQ_TEST";
     }
+
+    Integer HTTP_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR.value();
 }

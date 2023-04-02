@@ -1,9 +1,11 @@
 package co.ptit.api;
 
+import co.ptit.domain.dto.ResponseDto;
 import co.ptit.domain.dto.request.TestRequestDto;
 import co.ptit.domain.entity.Test;
 import co.ptit.repo.TestRepository;
 import co.ptit.utils.Constant;
+import co.ptit.utils.MsgUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +63,20 @@ public class TestController {
                 .updateDatetime(LocalDateTime.now())
                 .build());
         return ResponseEntity.ok(Boolean.TRUE);
+    }
+
+    @GetMapping("/success")
+    ResponseDto<?> success(@RequestParam("id") Long id) {
+        return ResponseDto.ok(testRepository.findByIdAndStatus(id, Constant.STATUS.ACTIVE.value()));
+    }
+
+    @GetMapping("/err")
+    ResponseDto<?> err() {
+        return ResponseDto.err("err", "Message error");
+    }
+
+    @GetMapping("/error")
+    ResponseDto<?> error() {
+        throw new IllegalArgumentException(MsgUtil.getMessage("test.01"));
     }
 }
