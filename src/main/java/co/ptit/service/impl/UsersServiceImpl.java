@@ -1,5 +1,6 @@
 package co.ptit.service.impl;
 
+import co.ptit.domain.dto.request.LoginRequestDto;
 import co.ptit.domain.dto.request.RegisterRequestDto;
 import co.ptit.domain.entity.UserInfo;
 import co.ptit.domain.entity.Users;
@@ -83,5 +84,26 @@ public class UsersServiceImpl implements UsersService {
                 .build();
         usersRepository.save(user);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Object login(LoginRequestDto request) {
+        String userName = request.getUserName();
+        String password = request.getPassword();
+
+        //validate input
+        InputValidateUtil.validateNotNull("userName", userName);
+        InputValidateUtil.validateNotNull("password", password);
+
+        Users user = usersRepository.findByUserNameAndStatus(userName, Constant.STATUS.ACTIVE.value())
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException(MsgUtil.getMessage("login.error"));
+                });
+
+        if (BCrypt.checkpw(password, user.getPassword())){
+            return Boolean.TRUE;
+        }else {
+            throw new IllegalArgumentException(MsgUtil.getMessage("login.error"));
+        }
     }
 }
