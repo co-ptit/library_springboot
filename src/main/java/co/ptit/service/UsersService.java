@@ -1,6 +1,7 @@
 package co.ptit.service;
 
-import co.ptit.domain.dto.request.UsersRequestDto;
+import co.ptit.domain.dto.request.RegisterRequestDto;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * project: library_springboot
@@ -9,5 +10,12 @@ import co.ptit.domain.dto.request.UsersRequestDto;
 
 public interface UsersService {
 
-    boolean create(UsersRequestDto request);
+    /**
+     * Create Users
+     *
+     * @param request: RegisterRequestDto
+     * @return true or error
+     */
+    @Transactional
+    boolean register(RegisterRequestDto request);
 }

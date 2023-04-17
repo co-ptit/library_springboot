@@ -16,6 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <swagger-version>1.6.15</swagger-version>
+        <bcrypt-version>0.4</bcrypt-version>
     </properties>
     <dependencies>
         <dependency>
@@ -61,6 +62,14 @@
             <version>${swagger-version}</version>
         </dependency>
         <!--      Swagger      -->
+
+        <!-- Bcrypt-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${bcrypt-version}</version>
+        </dependency>
+        <!-- Bcrypt-->
 
     </dependencies>
 

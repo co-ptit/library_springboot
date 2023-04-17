@@ -1,10 +1,10 @@
 package co.ptit.api;
 
-import co.ptit.domain.dto.request.UsersRequestDto;
+import co.ptit.domain.dto.ResponseDto;
+import co.ptit.domain.dto.request.RegisterRequestDto;
 import co.ptit.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +23,14 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    @PostMapping("/create")
-    ResponseEntity<?> create(@RequestBody UsersRequestDto request) {
-        return ResponseEntity.ok(usersService.create(request));
+    /**
+     * Create Users
+     *
+     * @param request: RegisterRequestDto
+     * @return true or error
+     */
+    @PostMapping("/register")
+    ResponseDto<Object> register(@RequestBody RegisterRequestDto request) {
+        return ResponseDto.ok(usersService.register(request));
     }
 }

@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 public abstract class MsgUtil {
 
     private static final String BASE_NAME = "messages";
-    public static final String SPLIT = "###";
+    public static final String SPLIT = " : ";
 
     private MsgUtil() {
     }

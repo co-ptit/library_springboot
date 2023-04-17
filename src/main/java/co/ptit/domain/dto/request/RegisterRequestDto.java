@@ -12,10 +12,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsersRequestDto {
+public class RegisterRequestDto {
 
     private String userName;
     private String password;
+    private String fullName;
+    private String phoneNumber;
+    private String email;
+    private String address;
 
-    //TODO: ...
 }

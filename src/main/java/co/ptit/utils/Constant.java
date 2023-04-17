@@ -47,5 +47,11 @@ public interface Constant {
         String SEQ_TEST = "SEQ_TEST";
     }
 
+    interface Regex {
+        String PHONE_NUMBER = "((\\+84|0)(3|5|7|8|9))+([0-9]{8})";
+        String EMAIL = "^[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+    }
+
     Integer HTTP_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR.value();
+
 }
