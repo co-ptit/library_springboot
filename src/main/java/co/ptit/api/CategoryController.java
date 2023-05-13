@@ -2,7 +2,8 @@ package co.ptit.api;
 
 import co.ptit.domain.dto.ResponseDto;
 import co.ptit.domain.dto.request.BookRequestDto;
-import co.ptit.service.BookService;
+import co.ptit.domain.dto.request.CategoryRequestDto;
+import co.ptit.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,24 +16,24 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/library/book")
-public class BookController {
+@RequestMapping("/api/library/category")
+public class CategoryController {
 
-    private final BookService bookService;
+    private final CategoryService categoryService;
 
     /**
-     * Create Book
+     * Create Category
      *
      * @param request: BookRequestDto
      * @return true or error
      */
     @PostMapping("/create")
-    ResponseDto<Object> create(@RequestBody BookRequestDto request) {
+    ResponseDto<Object> create(@RequestBody CategoryRequestDto request) {
         return ResponseDto.ok("");
     }
 
     /**
-     * Read Book
+     * Read Category
      *
      * @param id:
      * @return BookResponseDto
@@ -43,7 +44,7 @@ public class BookController {
     }
 
     /**
-     * Update Book
+     * Update Category
      *
      * @param request: BookRequestDto
      * @return true or error
@@ -54,7 +55,7 @@ public class BookController {
     }
 
     /**
-     * Delete Book
+     * Delete Category
      *
      * @param id:
      * @return true or error

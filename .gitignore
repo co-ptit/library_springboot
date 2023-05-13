@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### database ###
-.resources/application-uat.yaml
+!**/src/main/resources/application-uat.yaml

@@ -1,9 +1,8 @@
 package co.ptit.service.impl;
 
-import co.ptit.domain.dto.request.BookRequestDto;
-import co.ptit.domain.dto.response.BookResponseDto;
-import co.ptit.repo.BookRepository;
-import co.ptit.service.BookService;
+import co.ptit.domain.dto.request.CategoryRequestDto;
+import co.ptit.domain.dto.response.CategoryResponseDto;
+import co.ptit.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,22 +15,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService {
-
-    private final BookRepository bookRepository;
+public class CategoryServiceImpl implements CategoryService {
 
     @Override
-    public boolean create(BookRequestDto request) {
+    public boolean create(CategoryRequestDto request) {
         return false;
     }
 
     @Override
-    public BookResponseDto read(Long id) {
+    public CategoryResponseDto read(Long id) {
         return null;
     }
 
     @Override
-    public boolean update(BookRequestDto request) {
+    public boolean update(CategoryRequestDto request) {
         return false;
     }
 
