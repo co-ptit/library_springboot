@@ -2,8 +2,6 @@ package co.ptit.domain.dto.request;
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 /**
  * project: library_springboot
  * date:    5/13/2023

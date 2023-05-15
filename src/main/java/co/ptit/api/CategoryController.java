@@ -29,18 +29,18 @@ public class CategoryController {
      */
     @PostMapping("/create")
     ResponseDto<Object> create(@RequestBody CategoryRequestDto request) {
-        return ResponseDto.ok("");
+        return ResponseDto.ok(categoryService.create(request));
     }
 
     /**
      * Read Category
      *
-     * @param id:
+     * @param code:
      * @return BookResponseDto
      */
     @GetMapping("/read")
-    ResponseDto<Object> read(@RequestParam("id") Long id) {
-        return ResponseDto.ok("");
+    ResponseDto<Object> read(@RequestParam("code") String code) {
+        return ResponseDto.ok(categoryService.read(code));
     }
 
     /**
@@ -50,19 +50,19 @@ public class CategoryController {
      * @return true or error
      */
     @PutMapping("/update")
-    ResponseDto<Object> update(@RequestBody BookRequestDto request) {
-        return ResponseDto.ok("");
+    ResponseDto<Object> update(@RequestBody CategoryRequestDto request) {
+        return ResponseDto.ok(categoryService.update(request));
     }
 
     /**
      * Delete Category
      *
-     * @param id:
+     * @param code:
      * @return true or error
      */
     @DeleteMapping("/delete")
-    ResponseDto<Object> delete(@RequestParam("id") Long id) {
-        return ResponseDto.ok("");
+    ResponseDto<Object> delete(@RequestParam("code") String code) {
+        return ResponseDto.ok(categoryService.delete(code));
     }
 
 }

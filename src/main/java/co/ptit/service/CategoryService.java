@@ -21,10 +21,10 @@ public interface CategoryService {
     /**
      * Read Category
      *
-     * @param id:
+     * @param code:
      * @return CategoryResponseDto
      */
-    CategoryResponseDto read(Long id);
+    CategoryResponseDto read(String code);
 
     /**
      * Update Category
@@ -37,9 +37,9 @@ public interface CategoryService {
     /**
      * Delete Category
      *
-     * @param id:
+     * @param code:
      * @return true or error
      */
-    boolean delete(Long id);
+    boolean delete(String code);
 
 }
