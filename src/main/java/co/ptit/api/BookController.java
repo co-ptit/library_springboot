@@ -64,4 +64,15 @@ public class BookController {
         return ResponseDto.ok(bookService.delete(id));
     }
 
+    /**
+     * Search Book
+     *
+     * @param page, size:
+     * @return List<BookResponseDto>
+     */
+    @GetMapping("/search")
+    ResponseDto<Object> search(@RequestParam int page, @RequestParam int size) {
+        return ResponseDto.ok(bookService.search(page, size));
+    }
+
 }

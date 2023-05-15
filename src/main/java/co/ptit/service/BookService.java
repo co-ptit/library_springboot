@@ -2,6 +2,7 @@ package co.ptit.service;
 
 import co.ptit.domain.dto.request.BookRequestDto;
 import co.ptit.domain.dto.response.BookResponseDto;
+import org.springframework.data.domain.Page;
 
 /**
  * project: library_springboot
@@ -41,5 +42,7 @@ public interface BookService {
      * @return true or error
      */
     boolean delete(Long id);
+
+    Page<BookResponseDto> search(int page, int size);
 
 }

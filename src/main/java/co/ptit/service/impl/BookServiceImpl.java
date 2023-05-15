@@ -14,10 +14,16 @@ import co.ptit.utils.MsgUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * project: library_springboot
@@ -166,5 +172,22 @@ public class BookServiceImpl implements BookService {
         book.setStatus(Constant.STATUS.INACTIVE.value());
         bookRepository.save(book);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Page<BookResponseDto> search(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookRepository.findAllByStatus(Constant.STATUS.ACTIVE.value(), pageable);
+
+        List<BookResponseDto> responseDtoList = new ArrayList<>();
+        books.forEach(b -> {
+            BookResponseDto responseDto = BookResponseDto.builder().build();
+            BeanUtils.copyProperties(b, responseDto);
+            Category category = categoryRepository
+                    .findByCategoryIdAndStatus(b.getCategoryId(), Constant.STATUS.ACTIVE.value()).orElseThrow();
+            responseDto.setCategoryName(category.getName());
+            responseDtoList.add(responseDto);
+        });
+        return new PageImpl<>(responseDtoList, pageable, books.getTotalElements());
     }
 }
