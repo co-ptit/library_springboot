@@ -16,12 +16,13 @@ import java.time.LocalDate;
 @Builder
 public class BookRequestDto {
 
+    private Long bookId;
     private String title;
     private String author;
-    private String categoryId;
+    private Long categoryId;
     private LocalDate releaseDate;
     private Long price;
-    private Long pageNumber;
+    private Integer pageNumber;
     private Long quantitySold;
     private String description;
     private String coverImageUrl;

@@ -20,6 +20,6 @@ public class BookResponseDto {
     private String author;
     private String description;
     private LocalDate releaseDate;
-    private Long pageNumber;
-    private String categoryId;
+    private Integer pageNumber;
+    private String categoryName;
 }

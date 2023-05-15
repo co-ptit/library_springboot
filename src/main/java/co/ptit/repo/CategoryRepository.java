@@ -16,4 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByCodeAndStatus(String code, Integer status);
 
+    Optional<Category> findByCategoryIdAndStatus(Long id, Integer status);
+
 }

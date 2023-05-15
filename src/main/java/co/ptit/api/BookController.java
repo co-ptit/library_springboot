@@ -28,7 +28,7 @@ public class BookController {
      */
     @PostMapping("/create")
     ResponseDto<Object> create(@RequestBody BookRequestDto request) {
-        return ResponseDto.ok("");
+        return ResponseDto.ok(bookService.create(request));
     }
 
     /**
@@ -39,7 +39,7 @@ public class BookController {
      */
     @GetMapping("/read")
     ResponseDto<Object> read(@RequestParam("id") Long id) {
-        return ResponseDto.ok("");
+        return ResponseDto.ok(bookService.read(id));
     }
 
     /**
@@ -50,7 +50,7 @@ public class BookController {
      */
     @PutMapping("/update")
     ResponseDto<Object> update(@RequestBody BookRequestDto request) {
-        return ResponseDto.ok("");
+        return ResponseDto.ok(bookService.update(request));
     }
 
     /**
@@ -61,7 +61,7 @@ public class BookController {
      */
     @DeleteMapping("/delete")
     ResponseDto<Object> delete(@RequestParam("id") Long id) {
-        return ResponseDto.ok("");
+        return ResponseDto.ok(bookService.delete(id));
     }
 
 }

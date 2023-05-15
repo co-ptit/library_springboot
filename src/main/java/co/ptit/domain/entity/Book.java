@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -43,7 +44,7 @@ public class Book extends BaseEntity{
     
     @Basic
     @Column(name = "RELEASE_DATE")
-    private LocalDateTime releaseDate;
+    private LocalDate releaseDate;
     
     @Basic
     @Column(name = "PRICE")
@@ -54,8 +55,8 @@ public class Book extends BaseEntity{
     private Integer pageNumber;
     
     @Basic
-    @Column(name = "QUANTITY_SOlD")
-    private Integer quantitySOlD;
+    @Column(name = "QUANTITY_SOLD")
+    private Long quantitySold;
     
     @Basic
     @Column(name = "DESCRIPTION")
