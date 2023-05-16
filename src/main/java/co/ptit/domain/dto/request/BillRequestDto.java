@@ -15,5 +15,6 @@ import lombok.*;
 public class BillRequestDto {
 
     //TODO.....
+    private String a;
 
 }

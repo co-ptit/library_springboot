@@ -3,6 +3,7 @@ package co.ptit.service;
 import co.ptit.domain.dto.request.LoginRequestDto;
 import co.ptit.domain.dto.request.RegisterRequestDto;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * project: library_springboot
@@ -27,4 +28,12 @@ public interface UsersService {
      * @return data or error
      */
     Object login(LoginRequestDto request);
+
+    /**
+     * Upload avatar
+     *
+     * @param data: image data
+     * @return true or error
+     */
+    boolean updateAvatar(MultipartFile data, Long userId);
 }

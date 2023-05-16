@@ -9,12 +9,14 @@ import co.ptit.repo.UserInfoRepository;
 import co.ptit.repo.UsersRepository;
 import co.ptit.service.UsersService;
 import co.ptit.utils.Constant;
+import co.ptit.utils.FileUtil;
 import co.ptit.utils.InputValidateUtil;
 import co.ptit.utils.MsgUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -100,10 +102,35 @@ public class UsersServiceImpl implements UsersService {
                     throw new IllegalArgumentException(MsgUtil.getMessage("login.error"));
                 });
 
-        if (BCrypt.checkpw(password, user.getPassword())){
+        if (BCrypt.checkpw(password, user.getPassword())) {
             return Boolean.TRUE;
-        }else {
+        } else {
             throw new IllegalArgumentException(MsgUtil.getMessage("login.error"));
         }
+    }
+
+    @Override
+    public boolean updateAvatar(MultipartFile data, Long userId) {
+        //validate input
+        if (userId <= 0) {
+            throw new ValidateCommonException(MsgUtil.getMessage("input.invalid", "userId"));
+        }
+
+        //check exists
+        Users users = usersRepository.findByUserIdAndStatus(userId, Constant.STATUS.ACTIVE.value())
+                .orElseThrow(() -> {
+                    throw new ValidateCommonException(MsgUtil.getMessage("users.not.exists", "usedId", userId));
+                });
+        UserInfo userInfo = userInfoRepository.findByUserInfoIdAndStatus(users.getUserInfoId(), Constant.STATUS.ACTIVE.value())
+                .orElseThrow(() -> {
+                    throw new ValidateCommonException(
+                            MsgUtil.getMessage("users.info.not.exists", "usedInfoId", users.getUserInfoId()));
+                });
+
+        String url = FileUtil.upload(data, Constant.AVATAR_PATH);
+        userInfo.setAvatarUrl(url);
+        userInfo.setUpdateDatetime(LocalDateTime.now());
+        userInfoRepository.save(userInfo);
+        return Boolean.TRUE;
     }
 }

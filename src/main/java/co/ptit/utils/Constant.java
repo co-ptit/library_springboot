@@ -37,7 +37,7 @@ public interface Constant {
         }
     }
 
-    interface Sequence{
+    interface Sequence {
         String SEQ_USERS = "SEQ_USER_ID";
         String SEQ_USER_INFO = "SEQ_USER_INFO_ID";
         String SEQ_BOOK = "SEQ_BOOK_ID";
@@ -53,5 +53,8 @@ public interface Constant {
     }
 
     Integer HTTP_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    String ROOT_PATH = "home/";
+    String AVATAR_PATH = "avatar/";
+    String BOOK_PATH = "book/";
 
 }
