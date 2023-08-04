@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * project: library_springboot
  * date:    4/2/2023
@@ -71,4 +73,20 @@ public class UsersController {
     ResponseEntity<?> viewAvatar(@RequestParam("url") String url) {
         return ResponseEntity.ok().body(FileUtil.download(url));
     }
+
+    @GetMapping("/export")
+    void export(HttpServletResponse response) {
+        usersService.export(response);
+    }
+
+    @GetMapping("/download-template")
+    void downloadTemplate(HttpServletResponse response) {
+
+    }
+
+    @PostMapping("/import")
+    void importUsers(@RequestBody MultipartFile file) {
+
+    }
+
 }

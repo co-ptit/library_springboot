@@ -5,6 +5,8 @@ import co.ptit.domain.dto.request.RegisterRequestDto;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * project: library_springboot
  * date:    4/2/2023
@@ -36,4 +38,11 @@ public interface UsersService {
      * @return true or error
      */
     boolean updateAvatar(MultipartFile data, Long userId);
+
+    void export(HttpServletResponse response);
+
+    void downloadTemplate(HttpServletResponse response);
+
+    void importUsers(MultipartFile file);
+
 }

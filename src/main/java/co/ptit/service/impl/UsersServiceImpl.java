@@ -2,23 +2,38 @@ package co.ptit.service.impl;
 
 import co.ptit.domain.dto.request.LoginRequestDto;
 import co.ptit.domain.dto.request.RegisterRequestDto;
+import co.ptit.domain.dto.response.UsersResponseDto;
 import co.ptit.domain.entity.UserInfo;
 import co.ptit.domain.entity.Users;
 import co.ptit.exception.ValidateCommonException;
 import co.ptit.repo.UserInfoRepository;
 import co.ptit.repo.UsersRepository;
+import co.ptit.service.ExcelService;
 import co.ptit.service.UsersService;
-import co.ptit.utils.Constant;
-import co.ptit.utils.FileUtil;
-import co.ptit.utils.InputValidateUtil;
-import co.ptit.utils.MsgUtil;
+import co.ptit.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jxls.common.Context;
+import org.jxls.util.JxlsHelper;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import static co.ptit.utils.Constant.*;
 
 /**
  * project: library_springboot
@@ -32,6 +47,10 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
     private final UserInfoRepository userInfoRepository;
+    private final ExcelService excelService;
+
+    @Value("${templates.excel.file-name.export-users}")
+    private String exportSmartBankFile;
 
     @Override
     public boolean register(RegisterRequestDto request) {
@@ -132,5 +151,59 @@ public class UsersServiceImpl implements UsersService {
         userInfo.setUpdateDatetime(LocalDateTime.now());
         userInfoRepository.save(userInfo);
         return Boolean.TRUE;
+    }
+
+    @Override
+    public void export(HttpServletResponse response) {
+        List<Users> usersList = usersRepository.findAllByStatus(Constant.STATUS.ACTIVE.value());
+        if (CollectionUtils.isEmpty(usersList)) {
+            return;
+        }
+
+        List<UsersResponseDto>  result= new ArrayList<>();
+        usersList.forEach(u -> {
+            UserInfo userInfo = userInfoRepository
+                    .findByUserInfoIdAndStatus(u.getUserInfoId(), Constant.STATUS.ACTIVE.value()).orElse(null);
+
+            UsersResponseDto usersDto = new UsersResponseDto();
+            BeanUtils.copyProperties(u, usersDto);
+            try {
+                BeanUtils.copyProperties(userInfo, usersDto);
+            } catch (Exception e) {
+                log.error("User error not user info: userId = {}", u.getUserId());
+            }
+
+            result.add(usersDto);
+        });
+
+        try {
+            InputStream inputStream = excelService.loadExcelTemplateFromResource(exportSmartBankFile);
+            if (Objects.isNull(inputStream)) {
+                return;
+            }
+
+            String resultFile = String.format(USERS_EXPORT_FILE_NAME, DateUtil.formatStringLongTimestamp(new Date())) + StringPool.XLSX;
+            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, ATTACHMENT_FILE + resultFile);
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            OutputStream os = response.getOutputStream();
+            Context context = new Context();
+            context.putVar("items", result);
+            context.putVar("currentTime", DateUtil.formatStringLongDate(new Date()));
+
+            JxlsHelper.getInstance().processTemplate(inputStream, os, context);
+            response.flushBuffer();
+        } catch (Exception e) {
+            log.error("SmartBank export error: {0}", e);
+        }
+    }
+
+    @Override
+    public void downloadTemplate(HttpServletResponse response) {
+
+    }
+
+    @Override
+    public void importUsers(MultipartFile file) {
+
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 
 public interface Constant {
 
+    String ATTACHMENT_FILE = "attachment;filename=";
+
     enum STATUS {
         ACTIVE(1), INACTIVE(0);
 
@@ -56,5 +58,7 @@ public interface Constant {
     String ROOT_PATH = "home/";
     String AVATAR_PATH = "avatar/";
     String BOOK_PATH = "book/";
+
+    String USERS_EXPORT_FILE_NAME = "Danh_sach_users_%s";
 
 }

@@ -21,3 +21,10 @@ spring:
         dialect: org.hibernate.dialect.Oracle12cDialect
         format_sql: 'true'
     show-sql: 'true'
+
+templates:
+  excel:
+    folder: template/excel
+    file-name:
+      export-users: export_users.xlsx
+      import-users: import_users.xlsx
