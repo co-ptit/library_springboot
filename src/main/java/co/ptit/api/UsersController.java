@@ -81,12 +81,12 @@ public class UsersController {
 
     @GetMapping("/download-template")
     void downloadTemplate(HttpServletResponse response) {
-
+        usersService.downloadTemplate(response);
     }
 
     @PostMapping("/import")
-    void importUsers(@RequestBody MultipartFile file) {
-
+    ResponseDto<Object> importUsers(@RequestBody MultipartFile file) {
+        return ResponseDto.ok(usersService.importUsers(file));
     }
 
 }

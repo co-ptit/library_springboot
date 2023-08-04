@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     username: CTV_CUSTOMER_VN
-    password: 
-    url:
+    password: TuAyTr0ngT0iBungNangHa
+    url: jdbc:oracle:thin:@//125.212.225.149:1521/ORCL
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 15

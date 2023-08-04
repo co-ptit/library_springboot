@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 
 public interface Constant {
 
-    String ATTACHMENT_FILE = "attachment;filename=";
-
     enum STATUS {
         ACTIVE(1), INACTIVE(0);
 
@@ -60,5 +58,8 @@ public interface Constant {
     String BOOK_PATH = "book/";
 
     String USERS_EXPORT_FILE_NAME = "Danh_sach_users_%s";
+    String USERS_IMPORT_TEMP_FILE_NAME = "Template_import_users";
+    String DEFAULT_PASSWORD = "123456";
+    String HASH_SEED = "c^t!sBdqsDds@]Gasd$ksdf.A$38.[sa<ji~ask#%^#&";
 
 }

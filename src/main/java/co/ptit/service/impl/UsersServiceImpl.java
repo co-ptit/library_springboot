@@ -11,6 +11,7 @@ import co.ptit.repo.UsersRepository;
 import co.ptit.service.ExcelService;
 import co.ptit.service.UsersService;
 import co.ptit.utils.*;
+import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
@@ -28,10 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalTime;
+import java.util.*;
 
 import static co.ptit.utils.Constant.*;
 
@@ -50,7 +49,10 @@ public class UsersServiceImpl implements UsersService {
     private final ExcelService excelService;
 
     @Value("${templates.excel.file-name.export-users}")
-    private String exportSmartBankFile;
+    private String exportUsersFile;
+
+    @Value("${templates.excel.file-name.import-users}")
+    private String importUsersFile;
 
     @Override
     public boolean register(RegisterRequestDto request) {
@@ -70,15 +72,15 @@ public class UsersServiceImpl implements UsersService {
         InputValidateUtil.validateNotNull("address", address);
 
         //check exists
-        usersRepository.findByUserNameAndStatus(userName, Constant.STATUS.ACTIVE.value())
+        usersRepository.findByUserNameAndStatus(userName, STATUS.ACTIVE.value())
                 .ifPresent(u -> {
                     throw new ValidateCommonException(MsgUtil.getMessage("users.exists", "userName", userName));
                 });
-        userInfoRepository.findByPhoneNumberAndStatus(phoneNumber, Constant.STATUS.ACTIVE.value())
+        userInfoRepository.findByPhoneNumberAndStatus(phoneNumber, STATUS.ACTIVE.value())
                 .ifPresent(u -> {
                     throw new ValidateCommonException(MsgUtil.getMessage("users.exists", "phoneNumber", phoneNumber));
                 });
-        userInfoRepository.findByEmailAndStatus(email, Constant.STATUS.ACTIVE.value())
+        userInfoRepository.findByEmailAndStatus(email, STATUS.ACTIVE.value())
                 .ifPresent(u -> {
                     throw new ValidateCommonException(MsgUtil.getMessage("users.exists", "email", email));
                 });
@@ -89,7 +91,7 @@ public class UsersServiceImpl implements UsersService {
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .address(address)
-                .status(Constant.STATUS.ACTIVE.value())
+                .status(STATUS.ACTIVE.value())
                 .createDatetime(LocalDateTime.now())
                 .build();
         userInfo = userInfoRepository.save(userInfo);
@@ -98,9 +100,9 @@ public class UsersServiceImpl implements UsersService {
         Users user = Users.builder()
                 .userName(userName)
                 .password(BCrypt.hashpw(password, BCrypt.gensalt()))
-                .role(Constant.ROLE.USER.value())
+                .role(ROLE.USER.value())
                 .userInfoId(userInfo.getUserInfoId())
-                .status(Constant.STATUS.ACTIVE.value())
+                .status(STATUS.ACTIVE.value())
                 .createDatetime(LocalDateTime.now())
                 .build();
         usersRepository.save(user);
@@ -116,7 +118,7 @@ public class UsersServiceImpl implements UsersService {
         InputValidateUtil.validateNotNull("userName", userName);
         InputValidateUtil.validateNotNull("password", password);
 
-        Users user = usersRepository.findByUserNameAndStatus(userName, Constant.STATUS.ACTIVE.value())
+        Users user = usersRepository.findByUserNameAndStatus(userName, STATUS.ACTIVE.value())
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException(MsgUtil.getMessage("login.error"));
                 });
@@ -136,17 +138,17 @@ public class UsersServiceImpl implements UsersService {
         }
 
         //check exists
-        Users users = usersRepository.findByUserIdAndStatus(userId, Constant.STATUS.ACTIVE.value())
+        Users users = usersRepository.findByUserIdAndStatus(userId, STATUS.ACTIVE.value())
                 .orElseThrow(() -> {
                     throw new ValidateCommonException(MsgUtil.getMessage("users.not.exists", "usedId", userId));
                 });
-        UserInfo userInfo = userInfoRepository.findByUserInfoIdAndStatus(users.getUserInfoId(), Constant.STATUS.ACTIVE.value())
+        UserInfo userInfo = userInfoRepository.findByUserInfoIdAndStatus(users.getUserInfoId(), STATUS.ACTIVE.value())
                 .orElseThrow(() -> {
                     throw new ValidateCommonException(
                             MsgUtil.getMessage("users.info.not.exists", "usedInfoId", users.getUserInfoId()));
                 });
 
-        String url = FileUtil.upload(data, Constant.AVATAR_PATH);
+        String url = FileUtil.upload(data, AVATAR_PATH);
         userInfo.setAvatarUrl(url);
         userInfo.setUpdateDatetime(LocalDateTime.now());
         userInfoRepository.save(userInfo);
@@ -155,15 +157,15 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void export(HttpServletResponse response) {
-        List<Users> usersList = usersRepository.findAllByStatus(Constant.STATUS.ACTIVE.value());
+        List<Users> usersList = usersRepository.findAllByStatus(STATUS.ACTIVE.value());
         if (CollectionUtils.isEmpty(usersList)) {
             return;
         }
 
-        List<UsersResponseDto>  result= new ArrayList<>();
+        List<UsersResponseDto> result = new ArrayList<>();
         usersList.forEach(u -> {
             UserInfo userInfo = userInfoRepository
-                    .findByUserInfoIdAndStatus(u.getUserInfoId(), Constant.STATUS.ACTIVE.value()).orElse(null);
+                    .findByUserInfoIdAndStatus(u.getUserInfoId(), STATUS.ACTIVE.value()).orElse(null);
 
             UsersResponseDto usersDto = new UsersResponseDto();
             BeanUtils.copyProperties(u, usersDto);
@@ -177,13 +179,13 @@ public class UsersServiceImpl implements UsersService {
         });
 
         try {
-            InputStream inputStream = excelService.loadExcelTemplateFromResource(exportSmartBankFile);
+            InputStream inputStream = excelService.loadExcelTemplateFromResource(exportUsersFile);
             if (Objects.isNull(inputStream)) {
                 return;
             }
 
             String resultFile = String.format(USERS_EXPORT_FILE_NAME, DateUtil.formatStringLongTimestamp(new Date())) + StringPool.XLSX;
-            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, ATTACHMENT_FILE + resultFile);
+            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, FileUtil.ATTACHMENT_FILE + resultFile);
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             OutputStream os = response.getOutputStream();
             Context context = new Context();
@@ -193,17 +195,66 @@ public class UsersServiceImpl implements UsersService {
             JxlsHelper.getInstance().processTemplate(inputStream, os, context);
             response.flushBuffer();
         } catch (Exception e) {
-            log.error("SmartBank export error: {0}", e);
+            log.error("Users export error: {0}", e);
         }
     }
 
     @Override
     public void downloadTemplate(HttpServletResponse response) {
-
+        try {
+            InputStream inputStream = this.excelService.loadExcelTemplateFromResource(importUsersFile);
+            if (Objects.isNull(inputStream)) {
+                return;
+            }
+            String resultFile = USERS_IMPORT_TEMP_FILE_NAME + StringPool.XLSX;
+            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, FileUtil.ATTACHMENT_FILE + resultFile);
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            OutputStream os = response.getOutputStream();
+            os.write(inputStream.readAllBytes());
+            response.flushBuffer();
+        } catch (Exception e) {
+            log.error("Users download temp import error: {0}", e);
+        }
     }
 
     @Override
-    public void importUsers(MultipartFile file) {
+    public Boolean importUsers(MultipartFile file) {
+        //validate
+        String fileExtension = Files.getFileExtension(FileUtil.sanitizeFilename(file.getOriginalFilename()));
+        if (!List.of(FileUtil.XLS, FileUtil.XLSX).contains(fileExtension)) {
+            throw new ValidateCommonException(MsgUtil.getMessage("invalid.file.format"));
+        }
 
+        //read data from file
+        Set<String> userNameList = usersRepository.findAllUserName();
+        Set<String> phoneNumberList = userInfoRepository.findAllPhoneNumber();
+        Set<String> emailList = userInfoRepository.findAllEmail();
+        List<UsersResponseDto> usersDtoList = excelService.readUsersDataFromExcelFile(file, phoneNumberList, emailList, userNameList);
+        if (CollectionUtils.isEmpty(usersDtoList)) {
+            throw new IllegalArgumentException(MsgUtil.getMessage("import.users.fail"));
+        }
+
+        // insert data to database
+        usersDtoList.forEach(u -> {
+            UserInfo userInfo = userInfoRepository.save(UserInfo.builder()
+                    .fullName(u.getFullName())
+                    .phoneNumber(u.getPhoneNumber())
+                    .email(u.getEmail())
+                    .address(u.getAddress())
+                    .status(STATUS.ACTIVE.value())
+                    .createDatetime(LocalDateTime.of(u.getCreateDate(), LocalTime.now()))
+                    .build());
+
+            usersRepository.save(Users.builder()
+                    .userName(u.getUserName())
+                    .password(BCrypt.hashpw(DEFAULT_PASSWORD, BCrypt.gensalt()))
+                    .role(ROLE.USER.value())
+                    .userInfoId(userInfo.getUserInfoId())
+                    .status(STATUS.ACTIVE.value())
+                    .createDatetime(LocalDateTime.of(u.getCreateDate(), LocalTime.now()))
+                    .build());
+        });
+
+        return Boolean.TRUE;
     }
 }

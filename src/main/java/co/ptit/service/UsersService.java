@@ -43,6 +43,7 @@ public interface UsersService {
 
     void downloadTemplate(HttpServletResponse response);
 
-    void importUsers(MultipartFile file);
+    @Transactional
+    Boolean importUsers(MultipartFile file);
 
 }
