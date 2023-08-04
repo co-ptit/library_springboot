@@ -6,6 +6,7 @@ import co.ptit.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * project: library_springboot
@@ -68,11 +69,23 @@ public class BookController {
      * Search Book
      *
      * @param page, size:
-     * @return List<BookResponseDto>
+     * @return Page<BookResponseDto>
      */
     @GetMapping("/search")
     ResponseDto<Object> search(@RequestParam int page, @RequestParam int size) {
         return ResponseDto.ok(bookService.search(page, size));
+    }
+
+    /**
+     * Upload cover image
+     *
+     * @param data: image data
+     * @return true or error
+     */
+    @PostMapping("/update-cover-image")
+    ResponseDto<Object> updateCoverImage(@RequestParam("data") MultipartFile data,
+                                         @RequestParam("bookId") Long bookId) {
+        return ResponseDto.ok(bookService.updateCoverImage(data, bookId));
     }
 
 }

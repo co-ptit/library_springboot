@@ -9,6 +9,7 @@ import co.ptit.repo.BookRepository;
 import co.ptit.repo.CategoryRepository;
 import co.ptit.service.BookService;
 import co.ptit.utils.Constant;
+import co.ptit.utils.FileUtil;
 import co.ptit.utils.InputValidateUtil;
 import co.ptit.utils.MsgUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -189,5 +191,26 @@ public class BookServiceImpl implements BookService {
             responseDtoList.add(responseDto);
         });
         return new PageImpl<>(responseDtoList, pageable, books.getTotalElements());
+    }
+
+    @Override
+    public boolean updateCoverImage(MultipartFile data, Long bookId) {
+        //validate
+        if (bookId <= 0) {
+            throw new ValidateCommonException(MsgUtil.getMessage("input.invalid", "bookId"));
+        }
+
+        //check exists
+        Book book = bookRepository.findByBookIdAndStatus(bookId, Constant.STATUS.ACTIVE.value())
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException(
+                            MsgUtil.getMessage("book.not.exists =  book not exists with {} : {}", "bookId", bookId));
+                });
+
+        String url = FileUtil.upload(data, Constant.BOOK_PATH);
+        book.setCoverImageUrl(url);
+        book.setUpdateDatetime(LocalDateTime.now());
+        bookRepository.save(book);
+        return Boolean.TRUE;
     }
 }

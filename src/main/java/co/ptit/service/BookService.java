@@ -3,6 +3,7 @@ package co.ptit.service;
 import co.ptit.domain.dto.request.BookRequestDto;
 import co.ptit.domain.dto.response.BookResponseDto;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * project: library_springboot
@@ -43,6 +44,19 @@ public interface BookService {
      */
     boolean delete(Long id);
 
+    /**
+     * Search Book
+     *
+     * @param page, size:
+     * @return Page<BookResponseDto>
+     */
     Page<BookResponseDto> search(int page, int size);
 
+    /**
+     * Upload cover image
+     *
+     * @param data: image data
+     * @return true or error
+     */
+    boolean updateCoverImage(MultipartFile data, Long bookId);
 }
