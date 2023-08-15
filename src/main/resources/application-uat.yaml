@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    username: CTV_CUSTOMER_VN
-    password: TuAyTr0ngT0iBungNangHa
-    url: jdbc:oracle:thin:@//125.212.225.149:1521/ORCL
+    username:
+    password:
+    url:
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 15
@@ -28,3 +28,4 @@ templates:
     file-name:
       export-users: export_users.xlsx
       import-users: import_users.xlsx
+      export-json: export_json.xlsx

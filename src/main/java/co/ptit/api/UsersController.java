@@ -89,4 +89,8 @@ public class UsersController {
         return ResponseDto.ok(usersService.importUsers(file));
     }
 
+    @PostMapping("/load-file-json")
+    void loadFileJson(@RequestBody MultipartFile file, HttpServletResponse response) {
+        usersService.loadFileJson(file, response);
+    }
 }

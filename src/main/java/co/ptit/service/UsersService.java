@@ -46,4 +46,6 @@ public interface UsersService {
     @Transactional
     Boolean importUsers(MultipartFile file);
 
+    void loadFileJson(MultipartFile file,HttpServletResponse response);
+
 }

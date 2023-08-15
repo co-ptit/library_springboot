@@ -28,3 +28,4 @@ templates:
     file-name:
       export-users: export_users.xlsx
       import-users: import_users.xlsx
+      export-json: export_json.xlsx

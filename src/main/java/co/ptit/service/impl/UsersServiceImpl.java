@@ -5,6 +5,7 @@ import co.ptit.domain.dto.request.RegisterRequestDto;
 import co.ptit.domain.dto.response.UsersResponseDto;
 import co.ptit.domain.entity.UserInfo;
 import co.ptit.domain.entity.Users;
+import co.ptit.domain.json.ResponseJson;
 import co.ptit.exception.ValidateCommonException;
 import co.ptit.repo.UserInfoRepository;
 import co.ptit.repo.UsersRepository;
@@ -12,6 +13,7 @@ import co.ptit.service.ExcelService;
 import co.ptit.service.UsersService;
 import co.ptit.utils.*;
 import com.google.common.io.Files;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
@@ -50,6 +52,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Value("${templates.excel.file-name.export-users}")
     private String exportUsersFile;
+
+    @Value("${templates.excel.file-name.export-json}")
+    private String exportJson;
 
     @Value("${templates.excel.file-name.import-users}")
     private String importUsersFile;
@@ -256,5 +261,26 @@ public class UsersServiceImpl implements UsersService {
         });
 
         return Boolean.TRUE;
+    }
+
+    @Override
+    public void loadFileJson(MultipartFile file, HttpServletResponse response) {
+        try {
+            ResponseJson data = new Gson().fromJson(new String(file.getBytes()), ResponseJson.class);
+            InputStream inputStream = excelService.loadExcelTemplateFromResource(exportJson);
+
+            String fileName = DateUtil.formatStringLongTimestamp(new Date()) + StringPool.XLSX;
+            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, FileUtil.ATTACHMENT_FILE + fileName);
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            OutputStream os = response.getOutputStream();
+            Context context = new Context();
+            context.putVar("items", data.getData().getPayload().getData());
+            context.putVar("currentTime", DateUtil.formatStringLongDate(new Date()));
+
+            JxlsHelper.getInstance().processTemplate(inputStream, os, context);
+            response.flushBuffer();
+        } catch (Exception e) {
+            log.error("Load file failed: {}", e.getMessage());
+        }
     }
 }
