@@ -6,6 +6,7 @@ import co.ptit.domain.dto.response.UsersResponseDto;
 import co.ptit.domain.entity.UserInfo;
 import co.ptit.domain.entity.Users;
 import co.ptit.domain.json.ResponseJson;
+import co.ptit.domain.json.UserJson;
 import co.ptit.exception.ValidateCommonException;
 import co.ptit.repo.UserInfoRepository;
 import co.ptit.repo.UsersRepository;
@@ -267,6 +268,8 @@ public class UsersServiceImpl implements UsersService {
     public void loadFileJson(MultipartFile file, HttpServletResponse response) {
         try {
             ResponseJson data = new Gson().fromJson(new String(file.getBytes()), ResponseJson.class);
+            var items = data.getData().getPayload().getData();
+            items.sort(Comparator.comparingInt(UserJson::getUserId));
             InputStream inputStream = excelService.loadExcelTemplateFromResource(exportJson);
 
             String fileName = DateUtil.formatStringLongTimestamp(new Date()) + StringPool.XLSX;
@@ -274,7 +277,7 @@ public class UsersServiceImpl implements UsersService {
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             OutputStream os = response.getOutputStream();
             Context context = new Context();
-            context.putVar("items", data.getData().getPayload().getData());
+            context.putVar("items", items);
             context.putVar("currentTime", DateUtil.formatStringLongDate(new Date()));
 
             JxlsHelper.getInstance().processTemplate(inputStream, os, context);
