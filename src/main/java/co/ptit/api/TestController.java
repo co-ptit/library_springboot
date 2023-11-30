@@ -6,10 +6,13 @@ import co.ptit.domain.entity.Test;
 import co.ptit.repo.TestRepository;
 import co.ptit.utils.Constant;
 import co.ptit.utils.MsgUtil;
+import com.tinify.Tinify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
@@ -77,5 +80,17 @@ public class TestController {
     @GetMapping("/error")
     ResponseDto<?> error() {
         throw new IllegalArgumentException(MsgUtil.getMessage("test.01"));
+    }
+
+    @GetMapping("/compression-image")
+    ResponseDto<Object> compressionImage(@RequestParam("file") MultipartFile file) throws IOException {
+        byte[] sourceData = file.getBytes();
+        byte[] resultData;
+        if (sourceData.length > Constant.MAX_SIZE_ECM * 1024) {
+            resultData = Tinify.fromBuffer(sourceData).toBuffer();
+        } else {
+            resultData = sourceData;
+        }
+        return ResponseDto.ok("source: " + sourceData.length + "; result: " + resultData.length);
     }
 }

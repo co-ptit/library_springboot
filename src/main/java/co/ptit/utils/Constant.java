@@ -62,4 +62,6 @@ public interface Constant {
     String DEFAULT_PASSWORD = "123456";
     String HASH_SEED = "c^t!sBdqsDds@]Gasd$ksdf.A$38.[sa<ji~ask#%^#&";
 
+    String KEY_TINY = "tsgryrXf4cc1W92ww5mLMSyDSzTRDnh3";
+    int MAX_SIZE_ECM = 512; //KB
 }
