@@ -1,6 +1,7 @@
 package co.ptit.api;
 
 import co.ptit.domain.dto.ResponseDto;
+import co.ptit.domain.dto.request.DateTimeRequestDto;
 import co.ptit.domain.dto.request.TestRequestDto;
 import co.ptit.domain.entity.Test;
 import co.ptit.repo.TestRepository;
@@ -17,7 +18,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Base64;
 
 /**
@@ -115,6 +115,11 @@ public class TestController {
             log.error("err: {}", e.getMessage());
         }
         return ResponseDto.ok("");
+    }
+
+    @PostMapping("/date-time")
+    ResponseDto<Object> dateTime(@RequestBody DateTimeRequestDto request) {
+        return ResponseDto.ok(request);
     }
 
 }

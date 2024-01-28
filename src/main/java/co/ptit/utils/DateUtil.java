@@ -40,6 +40,8 @@ public class DateUtil {
      */
     public static final String LONG_TIME_PATTERN = "HH:mm";
 
+    public static final String TIME_PATTERN = "HH:mm:ss";
+
     /**
      * The Constant SHORT_DATE_PATTERN.
      */

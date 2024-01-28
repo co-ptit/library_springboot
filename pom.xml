@@ -52,6 +52,7 @@
         </dependency>
 
         <!--       Swagger       -->
+<!--        http://localhost:8025/swagger-ui/index.html-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
