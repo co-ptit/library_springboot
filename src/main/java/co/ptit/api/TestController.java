@@ -9,11 +9,16 @@ import co.ptit.utils.MsgUtil;
 import com.tinify.Tinify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * project: library_springboot
@@ -93,4 +98,23 @@ public class TestController {
         }
         return ResponseDto.ok("source: " + sourceData.length + "; result: " + resultData.length);
     }
+
+    @GetMapping("/compression-image-v2")
+    ResponseDto<Object> compressionImageV2(@RequestParam("file") MultipartFile file) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(new ByteArrayInputStream(file.getBytes()))
+                    .size(450, 600)
+                    .outputFormat("png")
+                    .outputQuality(0.5)
+                    .toOutputStream(outputStream);
+
+
+            return ResponseDto.ok(Base64.getEncoder().encodeToString(outputStream.toByteArray()));
+        } catch (Exception e) {
+            log.error("err: {}", e.getMessage());
+        }
+        return ResponseDto.ok("");
+    }
+
 }
