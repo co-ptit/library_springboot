@@ -2,6 +2,7 @@ package co.ptit.domain.dto;
 
 import co.ptit.utils.MsgUtil;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -68,6 +69,16 @@ public class ResponseDto<T> implements Serializable {
         return msgExtract(ResponseDto.<T>builder().success(false)
                 .data(Data.<T>builder()
                         .msgCode(key)
+                        .msgContent(msg)
+                        .payload(null)
+                        .build())
+                .build());
+    }
+
+    public static <T> ResponseDto<T> errBadRequest(String msg) {
+        return msgExtract(ResponseDto.<T>builder().success(false)
+                .data(Data.<T>builder()
+                        .msgCode(HttpStatus.BAD_REQUEST.name())
                         .msgContent(msg)
                         .payload(null)
                         .build())

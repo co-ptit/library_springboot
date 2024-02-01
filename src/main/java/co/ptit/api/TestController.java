@@ -3,6 +3,7 @@ package co.ptit.api;
 import co.ptit.domain.dto.ResponseDto;
 import co.ptit.domain.dto.request.DateTimeRequestDto;
 import co.ptit.domain.dto.request.TestRequestDto;
+import co.ptit.domain.dto.request.ValidateRequestDto;
 import co.ptit.domain.entity.Test;
 import co.ptit.repo.TestRepository;
 import co.ptit.utils.Constant;
@@ -14,6 +15,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -121,5 +123,11 @@ public class TestController {
     ResponseDto<Object> dateTime(@RequestBody DateTimeRequestDto request) {
         return ResponseDto.ok(request);
     }
+
+    @PostMapping("/validate")
+    ResponseDto<Object> validate(@RequestBody @Valid ValidateRequestDto request) {
+        return ResponseDto.ok(request);
+    }
+
 
 }
