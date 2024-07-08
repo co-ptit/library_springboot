@@ -1,5 +1,6 @@
 server:
   port: 8025
+#  http://localhost:8025/swagger-ui/index.html
 
 spring:
   datasource:

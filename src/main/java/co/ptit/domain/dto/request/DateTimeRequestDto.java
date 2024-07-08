@@ -3,8 +3,6 @@ package co.ptit.domain.dto.request;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * @author: HieuDo
@@ -19,7 +17,5 @@ import java.time.LocalTime;
 @Builder
 public class DateTimeRequestDto {
 
-    private LocalTime localTime;
     private LocalDate localDate;
-    private LocalDateTime localDateTime;
 }

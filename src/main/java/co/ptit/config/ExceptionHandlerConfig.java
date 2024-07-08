@@ -2,6 +2,8 @@ package co.ptit.config;
 
 import co.ptit.domain.dto.ResponseDto;
 import co.ptit.exception.ValidateCommonException;
+import co.ptit.utils.DateUtil;
+import co.ptit.utils.MsgUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.NestedServletException;
 
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import static co.ptit.utils.Constant.HTTP_ERROR_STATUS;
@@ -52,6 +55,15 @@ public class ExceptionHandlerConfig {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         return ResponseEntity.ok().body(ResponseDto.errBadRequest(fieldErrors.get(0).getDefaultMessage()));
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DateTimeParseException.class)
+    protected ResponseEntity<Object> dateTimeParseException(DateTimeParseException ex) {
+        return ResponseEntity.ok().body(ResponseDto
+                .errBadRequest(MsgUtil.getMessage("date.time.invalid.format",
+                        ex.getParsedString(), DateUtil.SHORT_DATE_PATTERN)));
     }
 
 }

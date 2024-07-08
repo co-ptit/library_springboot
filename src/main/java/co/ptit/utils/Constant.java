@@ -37,6 +37,20 @@ public interface Constant {
         }
     }
 
+    enum MONTH_EVEN {
+        april(4), june(6), september(9), november(11);
+
+        public int value() {
+            return value();
+        }
+
+        final int value;
+
+        MONTH_EVEN(int value) {
+            this.value = value;
+        }
+    }
+
     interface Sequence {
         String SEQ_USERS = "SEQ_USER_ID";
         String SEQ_USER_INFO = "SEQ_USER_INFO_ID";
@@ -64,4 +78,11 @@ public interface Constant {
 
     String KEY_TINY = "tsgryrXf4cc1W92ww5mLMSyDSzTRDnh3";
     int MAX_SIZE_ECM = 512; //KB
+
+    int MAX_DAY = 31;
+    int MAX_DAY_FEB = 29;
+    int START_DAY = 0;
+    int END_DAY = 2;
+    int START_MONTH = 3;
+    int END_MONTH = 5;
 }
