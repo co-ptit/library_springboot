@@ -1,5 +1,7 @@
 package co.ptit.domain.dto.request;
 
+import co.ptit.domain.common.ValidateDate;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,5 +19,6 @@ import java.time.LocalDate;
 @Builder
 public class DateTimeRequestDto {
 
+    @JsonDeserialize(using = ValidateDate.class)
     private LocalDate localDate;
 }

@@ -1,6 +1,7 @@
 package co.ptit.config;
 
 import co.ptit.domain.dto.ResponseDto;
+import co.ptit.exception.DateException;
 import co.ptit.exception.ValidateCommonException;
 import co.ptit.utils.DateUtil;
 import co.ptit.utils.MsgUtil;
@@ -64,6 +65,14 @@ public class ExceptionHandlerConfig {
         return ResponseEntity.ok().body(ResponseDto
                 .errBadRequest(MsgUtil.getMessage("date.time.invalid.format",
                         ex.getParsedString(), DateUtil.SHORT_DATE_PATTERN)));
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DateException.class)
+    protected ResponseEntity<Object> dateException(DateException ex) {
+        return ResponseEntity.ok().body(ResponseDto
+                .errBadRequest(MsgUtil.getMessage("date.time.not.exists", ex.getMessage())));
     }
 
 }

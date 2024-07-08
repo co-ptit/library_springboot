@@ -38,10 +38,10 @@ public interface Constant {
     }
 
     enum MONTH_EVEN {
-        april(4), june(6), september(9), november(11);
+        APRIL(4), JUNE(6), SEPTEMBER(9), NOVEMBER(11);
 
         public int value() {
-            return value();
+            return value;
         }
 
         final int value;
