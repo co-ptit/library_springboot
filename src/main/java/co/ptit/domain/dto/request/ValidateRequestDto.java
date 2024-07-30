@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 
 public class ValidateRequestDto {
 
+    Long id;
+
     @NotNull(message = "name is required")
     String name;
 

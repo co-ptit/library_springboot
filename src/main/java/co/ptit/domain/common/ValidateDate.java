@@ -3,7 +3,6 @@ package co.ptit.domain.common;
 import co.ptit.exception.DateException;
 import co.ptit.utils.Constant;
 import co.ptit.utils.DateUtil;
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
