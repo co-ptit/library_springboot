@@ -78,8 +78,8 @@ public class ResponseDto<T> implements Serializable {
     public static <T> ResponseDto<T> errBadRequest(String msg) {
         return msgExtract(ResponseDto.<T>builder().success(false)
                 .data(Data.<T>builder()
-                        .msgCode(HttpStatus.BAD_REQUEST.name())
-                        .msgContent(msg)
+                        .msgCode(msg)
+                        .msgContent(MsgUtil.getMessage(msg))
                         .payload(null)
                         .build())
                 .build());
