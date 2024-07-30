@@ -26,7 +26,7 @@ public class ResponseDto<T> implements Serializable {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Data<D> implements Serializable {
+    public static class Data<D> {
         String msgContent;
         String msgCode;
         D payload;

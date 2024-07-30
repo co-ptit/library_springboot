@@ -1,11 +1,11 @@
 package co.ptit.domain.dto.request;
 
 import co.ptit.domain.common.StripString;
+import co.ptit.domain.common.ValidateLong;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author: HieuDo
@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 public class ValidateRequestDto {
 
+    @JsonDeserialize(using = ValidateLong.class)
     Long id;
 
     @NotBlank(message = "name.required")

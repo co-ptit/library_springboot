@@ -5,6 +5,7 @@ import co.ptit.domain.dto.request.DateTimeRequestDto;
 import co.ptit.domain.dto.request.TestRequestDto;
 import co.ptit.domain.dto.request.ValidateRequestDto;
 import co.ptit.domain.entity.Test;
+import co.ptit.exception.ValidateCommonException;
 import co.ptit.repo.TestRepository;
 import co.ptit.utils.Constant;
 import co.ptit.utils.MsgUtil;

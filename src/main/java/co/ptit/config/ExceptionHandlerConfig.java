@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.NestedServletException;
 
 import java.time.format.DateTimeParseException;
 import java.util.List;
-
-import static co.ptit.utils.Constant.HTTP_ERROR_STATUS;
 
 /**
  * project: library_springboot
@@ -40,7 +37,7 @@ public class ExceptionHandlerConfig {
     protected ResponseEntity<Object> handleIllegalArgumentExceptions(RuntimeException ex) {
         log.error("Failed ValidateCommonException!", ex);
         String bodyOfResponse = ex.getMessage();
-        return ResponseEntity.status(HTTP_ERROR_STATUS).body(ResponseDto.err(bodyOfResponse));
+        return ResponseEntity.ok().body(ResponseDto.err(bodyOfResponse));
     }
 
     @ExceptionHandler(value = {NestedServletException.class})
