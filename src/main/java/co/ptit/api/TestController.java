@@ -3,10 +3,11 @@ package co.ptit.api;
 import co.ptit.domain.dto.ResponseDto;
 import co.ptit.domain.dto.request.DateTimeRequestDto;
 import co.ptit.domain.dto.request.TestRequestDto;
+import co.ptit.domain.dto.request.TestSearchRequestDto;
 import co.ptit.domain.dto.request.ValidateRequestDto;
 import co.ptit.domain.entity.Test;
-import co.ptit.exception.ValidateCommonException;
 import co.ptit.repo.TestRepository;
+import co.ptit.service.TestService;
 import co.ptit.utils.Constant;
 import co.ptit.utils.MsgUtil;
 import com.tinify.Tinify;
@@ -34,6 +35,7 @@ import java.util.Base64;
 @RequestMapping("/api/library/test")
 public class TestController {
 
+    private final TestService testService;
     private final TestRepository testRepository;
 
     @PostMapping("/create")
@@ -46,6 +48,16 @@ public class TestController {
                 .createDatetime(LocalDateTime.now())
                 .build());
         return ResponseDto.ok(Boolean.TRUE);
+    }
+
+    @GetMapping("/insert")
+    ResponseDto<?> insertTest(@RequestParam("number") Integer number) {
+        return ResponseDto.ok(testService.create(number));
+    }
+
+    @PostMapping("/search")
+    ResponseDto<?> search(@RequestBody @Valid TestSearchRequestDto request) {
+        return ResponseDto.ok(testService.search(request));
     }
 
     @GetMapping("/read")

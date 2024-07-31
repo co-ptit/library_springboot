@@ -67,6 +67,8 @@ public interface Constant {
     }
 
     Integer HTTP_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    Integer PAGE_INDEX_DEFAULT = 0;
+    Integer PAGE_SIZE_DEFAULT = 10;
     String ROOT_PATH = "home/";
     String AVATAR_PATH = "avatar/";
     String BOOK_PATH = "book/";
